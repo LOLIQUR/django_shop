@@ -1,20 +1,26 @@
 # 🛒 Django-магазин
 
-Bнтернет-магазин на Django с Bootstrap, главной страницей, контактами и формой обратной связи.
-
----
+Интернет-магазин на Django с Bootstrap, PostgreSQL, моделями, админкой, фикстурами и кастомными командами.
 
 ## 📁 Структура проекта
+
 ```
 django_shop/
-├── catalog/ # Приложение магазина
-│ ├── templates/ # HTML-шаблоны
-│ │ ├── index.html
-│ │ └── contacts.html
-│ ├── views.py # Контроллеры
-│ ├── urls.py # Маршруты приложения
-│ └── ...
-├── config/ # Настройки проекта
+├── catalog/
+│   ├── management/commands/
+│   ├── migrations/
+│   ├── templates/
+│   │   ├── index.html
+│   │   └── contacts.html
+│   ├── models.py
+│   ├── admin.py
+│   ├── views.py
+│   └── urls.py
+├── config/
+├── fixtures/
+├── screenshots/
+├── media/
+├── .env
 ├── manage.py
 ├── pyproject.toml
 ├── poetry.lock
@@ -24,42 +30,50 @@ django_shop/
 ## 🚀 Установка и запуск
 
 ```bash
-# Клонировать репозиторий
 git clone https://github.com/LOLIQUR/django_shop.git
 cd django_shop
-
-# Установить зависимости
 poetry install
-
-# Активировать виртуальное окружение
 poetry shell
-
-# Применить миграции
 python manage.py migrate
-
-# Запустить сервер
 python manage.py runserver
+```
+
 Открыть в браузере: http://127.0.0.1:8000
+
+## 🗄️ База данных
+
+```
+Проект использует PostgreSQL. Настройки в .env:
+
+DB_NAME=django_shop
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=5432
 ```
 
-### 📬 Форма обратной связи
+## 📦 Модели
+
 ```
-На странице контакты есть форма:
-Имя
-Email
-Сообщение
-После отправки данные выводятся в консоль сервера, 
-а пользователь видит сообщение об успехе.
+Category: name, description
+Product: name, description, price, category, image, created_at, updated_at
 ```
 
-### 🛠 Технологии
-```
-Django
-Bootstrap 5
-Font Awesome
-Python 3.13+
-Poetry
+## 🧪 Кастомная команда
+
+```bash
+python manage.py load_data
+Очищает таблицы и загружает данные из fixtures/.
 ```
 
-### 👨‍💻 Автор
+## 📬 Форма обратной связи
+
+```
+На странице /contacts/ есть форма: Имя, Email, Сообщение. После отправки данные выводятся в консоль.
+```
+
+## 👨‍💻 Автор
+```
 Данил Семенов
+GitHub: LOLIQUR
+```

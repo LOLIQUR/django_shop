@@ -40,6 +40,11 @@
     <h1 class="mb-3">Добро пожаловать в магазин</h1>
     <p class="lead">Лучшие товары по лучшим ценам</p>
 
+    <!-- Кнопка добавления товара -->
+    <a href="{% url 'product_create' %}" class="btn btn-primary mb-3">
+        <i class="fas fa-plus"></i> Добавить товар
+    </a>
+
     <div class="row mt-4">
         {% for product in products %}
         <div class="col-md-4 mb-4">
@@ -53,14 +58,25 @@
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text flex-grow-1">{{ product.description|truncatechars:80 }}</p>
                     <span class="badge bg-success fs-6">{{ product.price }} ₽</span>
-                    <a href="#" class="btn btn-outline-primary btn-sm mt-2">Купить</a>
+
+                    <div class="mt-2 d-flex gap-2 flex-wrap">
+                        <a href="{% url 'product_detail' product.pk %}" class="btn btn-outline-primary btn-sm">Подробнее</a>
+                        <a href="{% url 'product_edit' product.pk %}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         {% empty %}
         <div class="col-12">
             <div class="alert alert-info text-center">
-                <i class="fas fa-info-circle"></i> Товаров пока нет. Добавьте их через <a href="/admin" class="alert-link">админку</a>.
+                <i class="fas fa-info-circle"></i> Товаров пока нет. Добавьте их через
+                <a href="{% url 'product_create' %}" class="alert-link">форму добавления</a> или
+                <a href="/admin" class="alert-link">админку</a>.
             </div>
         </div>
         {% endfor %}

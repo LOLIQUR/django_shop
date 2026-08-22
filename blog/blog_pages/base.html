@@ -8,6 +8,16 @@
 </head>
 <body>
 
+<div style="background: #f8f9fa; padding: 8px 20px; text-align: right; border-bottom: 1px solid #ddd;">
+    {% if user.is_authenticated %}
+        <span style="margin-right: 15px;">👤 {{ user.email }}</span>
+        <a href="{% url 'users:logout' %}" style="color: red;">🚪 Выйти</a>
+    {% else %}
+        <a href="{% url 'users:register' %}" style="margin-right: 15px;">Регистрация</a>
+        <a href="{% url 'users:login' %}">Войти</a>
+    {% endif %}
+</div>
+
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
         <a class="navbar-brand" href="/">Мой магазин</a>

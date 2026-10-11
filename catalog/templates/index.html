@@ -25,8 +25,14 @@
                     <span class="badge bg-success fs-6">{{ product.price }} ₽</span>
                     <div class="mt-2 d-flex gap-2 flex-wrap">
                         <a href="{% url 'product_detail' product.pk %}" class="btn btn-outline-primary btn-sm">Подробнее</a>
-                        <a href="{% url 'product_edit' product.pk %}" class="btn btn-warning btn-sm">✏️</a>
-                        <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger btn-sm">🗑️</a>
+
+                        {% if user == product.owner or perms.catalog.can_unpublish_product %}
+                            <a href="{% url 'product_edit' product.pk %}" class="btn btn-warning btn-sm">✏️</a>
+                        {% endif %}
+
+                        {% if user == product.owner or perms.catalog.delete_product %}
+                            <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger btn-sm">🗑️</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

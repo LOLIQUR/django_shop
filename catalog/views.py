@@ -3,8 +3,11 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.core.cache import cache
+from django.shortcuts import render
 from .models import Product
 from .forms import ProductForm
+from .services import get_products_by_category
 
 
 class HomeView(ListView):
@@ -18,6 +21,17 @@ class ProductDetailView(DetailView):
     template_name = 'products/detail.html'
     context_object_name = 'product'
 
+    def get_object(self, queryset=None):
+        product_id = self.kwargs.get('pk')
+        cache_key = f'product_{product_id}'
+
+        product = cache.get(cache_key)
+        if product is None:
+            product = super().get_object(queryset)
+            cache.set(cache_key, product, 60 * 15)  # 15 минут
+
+        return product
+
 
 class ContactsView(TemplateView):
     template_name = 'contacts.html'
@@ -30,7 +44,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user  # ← автоматическая привязка владельца
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
@@ -58,3 +72,11 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         if request.user != product.owner and not is_moderator:
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
+
+
+def category_products(request, category_id):
+    products = get_products_by_category(category_id)
+    return render(request, 'products/category_products.html', {
+        'products': products,
+        'category_id': category_id,
+    })

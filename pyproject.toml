@@ -11,6 +11,8 @@ django = "^6.1"
 psycopg2-binary = "^2.9.12"
 python-dotenv = "^1.2.3"
 pillow = "^12.3.0"
+redis = "4.5.5"
+django-redis = "^7.0.0"
 
 
 [build-system]
